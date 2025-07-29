@@ -1,0 +1,17 @@
+class Solution {
+    public int[] smallestSubarrays(int[] nums) {
+        int n = nums.length;
+        int[] lastSeen = new int[30];
+        int[] res = new int[n];
+        for(int i=0;i<n;i++) res[i] = 1;
+
+        for(int i = n-1;i>=0;i--){
+            for(int bit =0;bit<30;bit++){
+                if((nums[i] & 1<< bit) > 0) lastSeen[bit] = i;
+                res[i] = Math.max(res[i],lastSeen[bit] -i+1);
+
+            }
+        }
+        return res;
+    }
+}
