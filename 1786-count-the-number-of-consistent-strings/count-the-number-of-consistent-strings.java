@@ -1,29 +1,23 @@
 class Solution {
     public int countConsistentStrings(String allowed, String[] words) {
-        int count = 0;
+        Set<Character> set = new HashSet<>();
+        for(int i=0;i<allowed.length();i++){
+            set.add(allowed.charAt(i));
+        }
+
+        int count =0;
         for(String str: words){
-            if(canBeFormed(str,allowed)){
-                count++;
+            int flag = 1;
+            for(int i=0;i<str.length();i++){
+                if(!set.contains(str.charAt(i))){
+                    flag = 0;
+                    break;
+                }
             }
+
+            count += flag;
         }
 
         return count;
-    }
-
-    static boolean canBeFormed(String str, String allowed){
-        Map<Character,Integer> hmap = new HashMap<>();
-        
-        for(char c : allowed.toCharArray()){
-            hmap.put(c,hmap.getOrDefault(c,0)+1);
-        }
-
-        for(char c : str.toCharArray()){
-            if(!hmap.containsKey(c)){
-                return false;
-            }
-            
-        }
-
-        return true;
     }
 }
