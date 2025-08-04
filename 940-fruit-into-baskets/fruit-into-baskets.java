@@ -1,19 +1,24 @@
 class Solution {
     public int totalFruit(int[] fruits) {
-        int start = 0 , end =0;
-        int n = fruits.length , maxLen = 0;
-        Map<Integer,Integer> map = new HashMap<>();
-        while(end < n){
-            map.put(fruits[end],map.getOrDefault(fruits[end],0)+1);
-            while(map.size() >= 3){
-                map.put(fruits[start],map.get(fruits[start])-1);
-                if(map.get(fruits[start]) == 0) map.remove(fruits[start]);
-                start++;
+        int i =0 , j = 0;
+        int count = 0;
+        Map<Integer,Integer> hmap = new HashMap<>();
+        while(j<fruits.length){
+            hmap.put(fruits[j],hmap.getOrDefault(fruits[j],0)+1);
+            if(hmap.size() <=2){
+                count = Math.max(count,(j-i+1));
+            } else {
+                hmap.put(fruits[i],hmap.get(fruits[i]) - 1);
+                if(hmap.get(fruits[i]) == 0) {
+                    hmap.remove(fruits[i]);
+                    
+                }
+                i++;
             }
-            int currLen = end - start +1;
-            maxLen = Math.max(maxLen,currLen);
-            end++;
+            j++;
         }
-        return maxLen;
+
+        return count;
+
     }
 }
