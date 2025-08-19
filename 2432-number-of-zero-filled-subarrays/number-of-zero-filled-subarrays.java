@@ -1,21 +1,18 @@
 class Solution {
     public long zeroFilledSubarray(int[] nums) {
-        int n = nums.length;
+        int n= nums.length;
         long result = 0;
-        int i =0;
-        while(i < n){
-            long length = 0;
+        int count = 0;
+       
+        for(int i=0;i<n;i++){
             if(nums[i] == 0){
-                while( i<n && nums[i] == 0){
-                    i++;
-                    length++;
-                }
+                count++;
             } else {
-                i++;
+                count = 0;
+               
             }
-            result += (length) * (length+1) / 2;
+            result += count;
         }
-
-        return result;
+return result;
     }
 }
