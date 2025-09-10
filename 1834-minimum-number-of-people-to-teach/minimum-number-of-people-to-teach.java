@@ -1,31 +1,41 @@
 class Solution {
     public int minimumTeachings(int n, int[][] languages, int[][] friendships) {
-        Set<Integer> cncon = new HashSet<>();
-        for(int [] friendship : friendships){
-            Map<Integer,Integer> mp = new HashMap<>();
-            boolean conm = false;
-            for(int lan : languages[friendship[0] - 1]){
-                mp.put(lan,1);
-            }
-            for(int lan : languages[friendship[1] - 1]){
-                if(mp.containsKey(lan)){
-                    conm = true;
-                    break;
+        Set<Integer> toTeach = new HashSet<>();
+        for(int[] frnd : friendships){
+            int u1 = frnd[0] - 1;
+            int u2 = frnd[1] - 1;
+            boolean canComm = false;
+
+            for(int lang1 : languages[u1]){
+                for(int lang2 : languages[u2]){
+                    if(lang1 == lang2){
+                        canComm = true;
+                        break;
+                    }
                 }
+                if(canComm) break;
             }
-            if(!conm){
-                cncon.add(friendship[0]-1);
-                cncon.add(friendship[1]-1);
-            }
-        }
-        int max = 0;
-        int[] cnt = new int[n+1];
-        for(int friendship : cncon){
-            for(int lan : languages[friendship]){
-                cnt[lan]++;
-                max = Math.max(max,cnt[lan]);
+            if(!canComm){
+                toTeach.add(u1);
+                toTeach.add(u2);
             }
         }
-        return cncon.size()-max;
+
+        int min = languages.length + 1;
+        for(int lang = 1;lang <= n;lang++){
+            int count = 0;
+            for(int user : toTeach){
+                boolean knows = false;
+                for(int l : languages[user]){
+                    if(l== lang){
+                        knows = true;
+                        break;
+                    }
+                }
+                if(!knows) count++;
+            }
+            min = Math.min(min,count);
+        }
+        return min;
     }
 }
