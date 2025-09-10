@@ -14,17 +14,18 @@
  * }
  */
 class Solution {
+    int nodeSum = 0;
     public TreeNode bstToGst(TreeNode root) {
-        int[] nodeSum = new int[1];
-        helper(root,nodeSum);
+       
+        helper(root);
         return root;
     }
 
-    private void helper(TreeNode root,int[] nodeSum){
+    private void helper(TreeNode root){
         if(root == null) return;
-        helper(root.right,nodeSum);
-        nodeSum[0] += root.val;
-        root.val = nodeSum[0];
-        helper(root.left,nodeSum);
+        helper(root.right);
+        nodeSum += root.val;
+        root.val = nodeSum;
+        helper(root.left);
     }
 }
