@@ -1,7 +1,13 @@
 class Solution {
     public boolean doesAliceWin(String s) {
-        return s.chars().anyMatch( c -> {
-            return "aeiou".indexOf(c) != -1;
-        });
+        for(char ch : s.toCharArray()){
+            if(isVowel(ch)){
+                return true;
+            }
+        }
+        return false;
+    }
+    private boolean isVowel(char ch){
+        return "aeiou".indexOf(ch) != -1;
     }
 }
