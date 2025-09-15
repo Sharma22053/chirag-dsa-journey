@@ -1,23 +1,22 @@
 class Solution {
     public int canBeTypedWords(String text, String brokenLetters) {
-        boolean[] broken = new boolean[26];
-        for(char ch  : brokenLetters.toCharArray()){
-            broken[ch - 'a'] = true;
+        Set<Character> set = new HashSet<>();
+        for(char ch : brokenLetters.toCharArray()){
+            set.add(ch);
         }
-
-        int count = 0;
-        boolean ok = true;
-
-        for(int i=0;i<=text.length();i++){
-            if(i<text.length() && text.charAt(i) != ' '){
-                if(broken[text.charAt(i) - 'a']){
+int count =0;
+        String[] words = text.split(" ");
+        for(String str : words){
+            boolean ok = true;
+            for(char c : str.toCharArray()){
+                if(set.contains(c)){
                     ok = false;
+                    break;
                 }
-            } else {
-                if(ok) count++;
-                ok = true;
             }
+            if(ok) count++;
         }
         return count;
+
     }
 }
