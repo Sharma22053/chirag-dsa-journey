@@ -6,14 +6,12 @@ class Solution {
         }
         int max = 0;
         for(Integer value : hmap.values()){
-            if(value > max){
-                max = value;
-            }
+            max = Math.max(value,max);
         }
         int frequency = 0;
-        for(Map.Entry<Integer,Integer> entry : hmap.entrySet()){
-            if(entry.getValue() == max){
-                frequency += entry.getValue();
+        for(int i : hmap.values()){
+            if(i == max){
+                frequency += i;
             }
         }
         return frequency;
