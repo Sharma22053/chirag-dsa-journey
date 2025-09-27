@@ -1,70 +1,43 @@
 class Solution {
     public int findTheCity(int n, int[][] edges, int distanceThreshold) {
-        List<int[]>[] adj = new ArrayList[n];
-        int[][] shortestMatrix = new int[n][n];
-
+        int[][] cost = new int[n][n];
         for(int i=0;i<n;i++){
-            Arrays.fill(shortestMatrix[i],Integer.MAX_VALUE);
-            shortestMatrix[i][i] = 0;
-            adj[i] = new ArrayList<>();
+            Arrays.fill(cost[i],Integer.MAX_VALUE);
+            cost[i][i] = 0;
         }
 
-        for(int[] edge : edges){
-            int start = edge[0];
-            int end = edge[1];
+        for (int[] edge : edges) {
+            int from = edge[0];
+            int to = edge[1];
             int weight = edge[2];
-            adj[start].add(new int[]{end,weight});
-            adj[end].add(new int[]{start,weight});
+            cost[from][to] = weight;
+            cost[to][from] = weight;
         }
 
-        for(int i=0;i<n;i++){
-            dijkstra(n,adj,shortestMatrix[i],i);
-        }
-
-        return getSmallest(n,shortestMatrix,distanceThreshold);
-    }
-
-    private void dijkstra(int n,List<int[]>[] adj,int[] shortestMatrix,int source){
-    PriorityQueue<int[]> queue = new PriorityQueue<>((a,b) -> (a[1] - b[1]));
-    queue.offer(new int[] {source,0});
-    Arrays.fill(shortestMatrix,Integer.MAX_VALUE);
-    shortestMatrix[source] = 0;
-
-        while(!queue.isEmpty()){
-            int[] current = queue.poll();
-            int currentCity = current[0];
-            int currentDistance = current[1];
-
-            if(shortestMatrix[currentCity] < currentDistance) continue;
-            for(int[] neighbour : adj[currentCity]){
-                int to = neighbour[0];
-                int nextDistance = neighbour[1];
-                if(shortestMatrix[to] > currentDistance + nextDistance){
-                    shortestMatrix[to] = currentDistance + nextDistance;
-                    queue.offer(new int[]{to,shortestMatrix[to]});
+        for (int via = 0; via < n; via++) {
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    if (cost[i][via] != Integer.MAX_VALUE && cost[via][j] != Integer.MAX_VALUE) {
+                        cost[i][j] = Math.min(cost[i][j], cost[i][via] + cost[via][j]);
+                    }
                 }
             }
         }
-    }
 
-    private int getSmallest(int n,int[][] shortestMatrix,int threshold){
-        int fewestR = -1;
-        int reachC = n;
-
-        for(int i=0;i<n;i++){
-            int rc =0;
-            for(int j=0;j<n;j++){
-                if(i==j) continue;
-                if(shortestMatrix[i][j] <= threshold){
-                    rc++;
+         int minReachable = Integer.MAX_VALUE, bestCity = -1;
+        for (int city = 0; city < n; city++) {
+            int reachableCount = 0;
+            for (int other = 0; other < n; other++) {
+                if (city != other && cost[city][other] <= distanceThreshold) {
+                    reachableCount++;
                 }
             }
-            if(rc <= reachC){
-                reachC = rc;
-                fewestR = i;
+            if (reachableCount <= minReachable) {
+                minReachable = reachableCount;
+                bestCity = city;
             }
         }
-        return fewestR;
 
+        return bestCity;
     }
 }
