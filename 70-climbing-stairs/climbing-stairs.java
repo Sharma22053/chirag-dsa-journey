@@ -1,10 +1,13 @@
 class Solution {
-    Integer[] dp = new Integer[46];
     public int climbStairs(int n) {
         if(n <= 1) return 1;
-        if(dp[n] != null) return dp[n];
 
-        return dp[n] = climbStairs(n-1) + climbStairs(n-2);
+        int prev = 1 ; int prev2 = 1;
+        for(int i=2;i<=n;i++){
+            int current = prev + prev2;           
+            prev2 = prev;
+            prev = current;
+        }
+        return prev;
     }
-    
 }
