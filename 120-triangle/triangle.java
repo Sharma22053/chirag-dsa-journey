@@ -1,18 +1,19 @@
 class Solution {
     Integer[][] dp;
+    int size;
     public int minimumTotal(List<List<Integer>> triangle) {
-        dp= new Integer[201][201];
+        size = triangle.size();
+        dp= new Integer[size][size];
         return helper(triangle,0,0);
     }
-    private int helper(List<List<Integer>> triangle,int index,int length){
-        if(length >= triangle.size()){
-            return 0;
-        }
-        if(dp[length][index] != null) return dp[length][index];
+    private int helper(List<List<Integer>> triangle,int row,int column){
+       if(row == size) return 0;
 
-    int i = triangle.get(length).get(index) + helper(triangle,index,length+1);
-    int iPlusOne = triangle.get(length).get(index) + helper(triangle,index+1,length+1);
+       if(dp[row][column] != null) return dp[row][column];
 
-    return dp[length][index] = Math.min(i,iPlusOne);
+       int left = triangle.get(row).get(column) + helper(triangle,row+1,column+1);
+       int right = triangle.get(row).get(column) + helper(triangle,row+1,column);
+
+       return dp[row][column] = Math.min(left,right);
     }
 }
