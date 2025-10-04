@@ -1,23 +1,18 @@
 class Solution {
-    int size;
     Integer[][] dp;
-
     public int minimumTotal(List<List<Integer>> triangle) {
-        size = triangle.size();
-        dp = new Integer[size][size];
-
-        return findSum(0, 0, triangle);
+        dp= new Integer[201][201];
+        return helper(triangle,0,0);
     }
-
-    private int findSum(int row, int column, List<List<Integer>> triangle) {
-        if (row == size)
+    private int helper(List<List<Integer>> triangle,int index,int length){
+        if(length >= triangle.size()){
             return 0;
-        if (dp[row][column] != null)
-            return dp[row][column];
+        }
+        if(dp[length][index] != null) return dp[length][index];
 
-        int left = findSum(row + 1, column, triangle);
-        int right = findSum(row + 1, column + 1, triangle);
+    int i = triangle.get(length).get(index) + helper(triangle,index,length+1);
+    int iPlusOne = triangle.get(length).get(index) + helper(triangle,index+1,length+1);
 
-        return dp[row][column] = triangle.get(row).get(column) + Math.min(left, right);
+    return dp[length][index] = Math.min(i,iPlusOne);
     }
 }
