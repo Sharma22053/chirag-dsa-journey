@@ -1,51 +1,40 @@
-//BFS Solution
+// DFS SOlution
 class Solution {
     int directions[][] = { { -1, 0 }, { 1, 0 }, { 0, 1 }, { 0, -1 } };
 
     public List<List<Integer>> pacificAtlantic(int[][] heights) {
+        int rowLength = heights.length;
+        int columnLength = heights[0].length;
+        boolean[][] pacific = new boolean[rowLength][columnLength];
+        boolean[][] atlantic = new boolean[rowLength][columnLength];
+
+        for(int i=0;i<rowLength;i++){
+            dfs(i,0,heights,pacific);
+            dfs(i,columnLength-1,heights,atlantic);
+        }
+        for(int i=0;i<columnLength;i++){
+             dfs(0,i,heights,pacific);
+            dfs(rowLength-1,i,heights,atlantic);
+        }
         List<List<Integer>> result = new ArrayList<>();
-        int row = heights.length, column = heights[0].length;
-        boolean[][] pacific = new boolean[row][column];
-        boolean[][] atlantic = new boolean[row][column];
-
-        for (int i = 0; i < row; i++) {
-            bfs(i, 0, pacific, heights);
-            bfs(i, column - 1, atlantic, heights);
-        }
-
-        for (int i = 0; i < column; i++) {
-            bfs(0, i, pacific, heights);
-            bfs(row - 1, i, atlantic, heights);
-        }
-
-        for (int i = 0; i < row; i++) {
-            for (int j = 0; j < column; j++) {
-                if (atlantic[i][j] && pacific[i][j]) {
-                    result.add(Arrays.asList(i, j));
-                }
+        for(int i=0;i<rowLength;i++){
+            for(int j=0;j<columnLength;j++){
+                if(atlantic[i][j] && pacific[i][j]) result.add(Arrays.asList(i,j));
             }
         }
-
-        return result;
+    return result;
     }
 
-    private void bfs(int row, int column, boolean[][] visit, int[][] heights) {
-        Queue<int[]> queue = new ArrayDeque<>();
-        queue.add(new int[] { row, column });
+    private void dfs(int row, int column, int[][] heights, boolean[][] visit) {
+        if(visit[row][column]) return;
         visit[row][column] = true;
-        int rowLength = heights.length, columnLength = heights[0].length;
-        while (!queue.isEmpty()) {
-            int[] current = queue.poll();
-            int r = current[0], c = current[1];
-            for (int[] dirs : directions) {
-                int newRow = dirs[0] + r;
-                int newCol = dirs[1] + c;
-                if (isValid(newRow, newCol, rowLength, columnLength) && !visit[newRow][newCol]
-                        && heights[newRow][newCol] >= heights[r][c]) {
-                    visit[newRow][newCol] = true;
-                    queue.add(new int[] { newRow, newCol });
-                }
-
+        for (int[] dirs : directions) {
+            int newRow = dirs[0] + row;
+            int newColumn = dirs[1] + column;
+            if (isValid(newRow, newColumn, heights.length, heights[0].length) &&
+                    !visit[newRow][newColumn] &&
+                    heights[row][column] <= heights[newRow][newColumn]) {
+                dfs(newRow, newColumn, heights, visit);
             }
         }
     }
