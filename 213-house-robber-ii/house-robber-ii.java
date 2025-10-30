@@ -1,30 +1,25 @@
 class Solution {
-    int[] temp;
-    int[] dp;
-
     public int rob(int[] nums) {
         int n = nums.length;
         if (n == 1)
             return nums[0];
-        temp = nums.clone();
-        dp = new int[n + 1];
-        Arrays.fill(dp, -1);
-        int one = helper(0, nums.length - 2);
-        dp = new int[n + 1];
-        Arrays.fill(dp, -1);
-        int two = helper(1, nums.length - 1);
-        return Math.max(one, two);
-    }
+        int[] dp = new int[n + 2];
+        for (int i = n - 2; i >= 0; i--) {
+            int leave = dp[i + 1];
+            int take = nums[i] + dp[i + 2];
+            dp[i] = Math.max(take, leave);
+        }
+        int first = dp[0];
+        dp = new int[n + 2];
+        for (int i = n - 1; i >= 1; i--) {
+            int leave = dp[i + 1];
+            int take = 0;
 
-    private int helper(int index, int last) {
-        if (index >= last + 1)
-            return 0;
-        if (dp[index] != -1)
-            return dp[index];
+            take = nums[i] + dp[i + 2];
 
-        int leave = helper(index + 1, last);
-        int take = temp[index] + helper(index + 2, last);
-        return dp[index] = Math.max(take, leave);
-
+            dp[i] = Math.max(take, leave);
+        }
+        int second = dp[1];
+        return Math.max(first, second);
     }
 }
