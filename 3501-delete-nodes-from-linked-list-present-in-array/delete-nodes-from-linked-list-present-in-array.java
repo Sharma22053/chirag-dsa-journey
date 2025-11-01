@@ -17,8 +17,8 @@ class Solution {
         ListNode dummy = new ListNode(-1);
         dummy.next = head;
         ListNode temp = dummy;
-        while (temp.next != null) {
-            if (set.contains(temp.next.val)) {
+        while (temp != null) {
+            if (temp.next != null && set.contains(temp.next.val)) {
                 temp.next = temp.next.next;
                 continue;
             }
