@@ -1,16 +1,8 @@
 class Solution {
     public int findCenter(int[][] edges) {
-        Map<Integer,Integer> hmap = new HashMap<>();
-        for(int[] edge : edges){
-            hmap.put(edge[0], hmap.getOrDefault(edge[0], 0) + 1);
-            hmap.put(edge[1], hmap.getOrDefault(edge[1], 0) + 1);
-        }
+        int[] firstNode = edges[0];
+        int[] secondNode = edges[1];
 
-        for(int i : hmap.keySet()){
-            if(hmap.get(i) == edges.length){
-                return i;
-            }
-        }
-        return -1;
+        return firstNode[0] == secondNode[0] || firstNode[0] == secondNode[1] ? firstNode[0] : firstNode[1];
     }
 }
