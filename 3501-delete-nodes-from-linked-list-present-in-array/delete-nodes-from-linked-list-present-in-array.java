@@ -10,10 +10,11 @@
  */
 class Solution {
     public ListNode modifiedList(int[] nums, ListNode head) {
-        Set<Integer> set = new HashSet<>();
-        for (int i : nums) {
-            set.add(i);
-        }
+        // Set<Integer> set = new HashSet<>();
+        // for (int i : nums) {
+        //     set.add(i);
+        // }
+        Set<Integer> set = Arrays.stream(nums).boxed().collect(Collectors.toSet());
         ListNode dummy = new ListNode(-1);
         dummy.next = head;
         ListNode temp = dummy;
