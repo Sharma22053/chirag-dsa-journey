@@ -1,27 +1,42 @@
 class Solution {
     public int findCircleNum(int[][] isConnected) {
         int n = isConnected.length;
-        int numberOfComponents = 0;
         boolean[] visit = new boolean[n];
-
+        List<List<Integer>> adjacencyList = buildAdjacency(isConnected);
+        int count =0;
         for(int i=0;i<n;i++){
             if(!visit[i]){
-                numberOfComponents++;
-                dfs(i,isConnected,visit);
+                dfs(adjacencyList,i,visit);
+                count++;
             }
         }
-
-        return numberOfComponents;
+        return count;
     }
 
-    private void dfs(int node,int[][] isConnected,boolean[] visit){
+    private void dfs(List<List<Integer>> adjacencyList,int node,boolean[] visit){
         visit[node] = true;
-
-        for(int i =0;i<isConnected.length;i++){
-            if(!visit[i] && isConnected[node][i] == 1){
-                dfs(i,isConnected,visit);
+        for(int neighbour : adjacencyList.get(node)){
+            if(!visit[neighbour]){
+                dfs(adjacencyList,neighbour,visit);
             }
         }
     }
 
+    private List<List<Integer>> buildAdjacency(int[][] isConnected) {
+        List<List<Integer>> result = new ArrayList<>();
+        int n = isConnected.length;
+        for (int i = 0; i < n; i++) {
+            result.add(new ArrayList<>());
+        }
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (isConnected[i][j] == 1) {
+                    result.get(i).add(j);
+                    result.get(j).add(i);
+                }
+
+            }
+        }
+        return result;
+    }
 }
