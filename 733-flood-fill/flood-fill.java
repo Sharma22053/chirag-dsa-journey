@@ -1,32 +1,26 @@
 class Solution {
-    int[][] directions = new int[][] { { 0, 1 }, { 0, -1 }, { -1, 0 }, { 1, 0 } };
-    int fillColor;
-    int initialColor;
+    int[][] directions = new int[][] { { 0, 1 }, { 0, -1 }, { 1, 0 }, { -1, 0 } };
+    int initialColour;
+    int fillColour;
 
     public int[][] floodFill(int[][] image, int sr, int sc, int color) {
         int[][] result = image;
-        this.fillColor = color;
-        this.initialColor = result[sr][sc];
-        
+        this.initialColour = result[sr][sc];
+        this.fillColour = color;
 
-        if (fillColor == initialColor)
+        if (fillColour == initialColour)
             return image;
-
-        dfs(result, sr, sc);
+        dfs(result,sr,sc);
         return result;
 
     }
 
-    private void dfs(int[][] result, int row, int col) {
-        if (row < 0 || row >= result.length || col < 0 || col >= result[0].length || result[row][col] != initialColor) {
+    private void dfs(int[][] result, int sr, int sc) {
+        if (sr < 0 || sc < 0 || sr >= result.length || sc >= result[0].length || result[sr][sc] != initialColour)
             return;
-        }
-
-       
-
-        result[row][col] = fillColor;
-        for (int[] dir : directions) {
-            dfs(result, row + dir[0], col + dir[1]);
+        result[sr][sc] = fillColour;
+        for (int[] dirs : directions) {
+            dfs(result, sr + dirs[0], sc + dirs[1]);
         }
     }
 }
