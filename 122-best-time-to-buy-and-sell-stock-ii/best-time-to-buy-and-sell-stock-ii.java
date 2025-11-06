@@ -1,20 +1,26 @@
 class Solution {
+    Integer[][] dp;
     public int maxProfit(int[] prices) {
         int n = prices.length;
-        int[][] dp = new int[n + 1][2];
-        dp[n][0] = 0;
-        dp[n][1] = 0;
-        for(int i = n-1;i>=0;i--){
-            for(int j=0;j<2;j++){
-                int profit = 0;
-                if(j == 0){
-                   profit = Math.max(dp[i+1][1] - prices[i] , dp[i+1][0]);
-                } else {
-                   profit =  Math.max(dp[i+1][0] + prices[i],dp[i+1][1]);
-                }
-                dp[i][j] = profit;
-            }
-        }
-        return dp[0][0];
+        dp = new Integer[n][2];
+        return helper(prices,0,0);
+
     }
+    private int helper(int[] prices,int index,int buy){
+        if(index == prices.length) return 0;
+        if(dp[index][buy] != null) return dp[index][buy];
+        int profit = 0;
+        if(buy == 0){
+            int leave = helper(prices,index+1,0);
+            int take = helper(prices,index+1,1) - prices[index];
+            profit = Math.max(leave,take);
+        } else {
+            int leave = helper(prices,index+1,1);
+            int take = prices[index] + helper(prices,index+1,0);
+            profit = Math.max(leave,take);
+
+        }
+        return dp[index][buy] = profit;
+    }
+
 }
