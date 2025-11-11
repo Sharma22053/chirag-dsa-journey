@@ -1,49 +1,39 @@
-class Pair{
-    String word;
-    int level;
-
-    Pair(String word,int level){
-        this.word = word;
-        this.level = level;
-    }
-}
-
 class Solution {
-
     public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        if(beginWord == endWord) return 0;
         Queue<Pair> queue = new LinkedList<>();
-        queue.offer(new Pair(beginWord,1));
-
         Set<String> set = new HashSet<>();
-        
-        for(String s : wordList){
-            set.add(s);
+        for(String str : wordList){
+            set.add(str);
         }
-        set.remove(beginWord);
-
+        queue.offer(new Pair(beginWord,1));
         while(!queue.isEmpty()){
-            Pair first = queue.poll();
-            String word = first.word;
-            int level = first.level;
-
-            if(word.equals(endWord)) return level;
-
-            for(int i=0;i<word.length();i++){
+            Pair current = queue.poll();
+            String currentWord = current.word;
+            int distance = current.distance;
+            if(currentWord.equals(endWord)) return distance;
+            for(int i=0;i<currentWord.length();i++){
                 for(char ch = 'a';ch<='z';ch++){
-                    char replaced[] = word.toCharArray();
+                    char[] replaced = currentWord.toCharArray();
                     replaced[i] = ch;
                     String replacedWord = new String(replaced);
-
                     if(set.contains(replacedWord)){
                         set.remove(replacedWord);
-                        queue.add(new Pair(replacedWord,level+1));
+                        queue.offer(new Pair(replacedWord,distance+1));
                     }
+
                 }
             }
-
+            
         }
-
         return 0;
-
+    }
+}
+class Pair{
+    String word;
+    int distance;
+    Pair(String word,int distance){
+        this.word = word;
+        this.distance = distance;
     }
 }
