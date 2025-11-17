@@ -1,14 +1,10 @@
 class Solution {
     public boolean kLengthApart(int[] nums, int k) {
-        List<Integer> list = new ArrayList<>();
+        int last = -1;
         for(int i=0;i<nums.length;i++){
             if(nums[i] == 1){
-                list.add(i);
-            }
-        }
-        for(int i=1;i<list.size();i++){
-            if((list.get(i) - list.get(i-1)) <= k){
-                return false;
+                if(last != -1 && i - last -1 < k) return false;
+                last = i;
             }
         }
         return true;
