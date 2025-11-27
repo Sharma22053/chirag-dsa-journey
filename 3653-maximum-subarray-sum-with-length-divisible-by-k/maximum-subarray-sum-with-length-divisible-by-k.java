@@ -1,19 +1,25 @@
 class Solution {
     public long maxSubarraySum(int[] nums, int k) {
         int n = nums.length;
-        long prefix = 0;
-        long maxSum = Long.MIN_VALUE;
-        long[] kSum = new long[k];
-        for (int i = 0; i < k; i++) {
-            kSum[i] = Long.MAX_VALUE / 2;
+        long[] prefixSum = new long[n];
+        prefixSum[0] = nums[0];
+        for (int i = 1; i < n; i++) {
+            prefixSum[i] = prefixSum[i - 1] + nums[i];
         }
-        kSum[(k - 1) % k] = 0;
-        for (int i = 0; i < n; i++) {
-            prefix += nums[i];
-            maxSum = Math.max(maxSum, prefix - kSum[i % k]);
-            kSum[i % k] = Math.min(kSum[i % k], prefix);
+
+        long result = Long.MIN_VALUE;
+        for(int start = 0;start <k;start++){
+            long currentSum = 0;
+            int i = start;
+            while(i < n && i+k-1<n){
+                int j = i+k-1;
+             long subSum = prefixSum[j] - ((i > 0) ? prefixSum[i - 1] : 0);
+                 currentSum = Math.max(currentSum+subSum,subSum);
+                result = Math.max(result,currentSum);
+                i+=k;
+            }
         }
-        return maxSum;
+        return result;
 
     }
 }
