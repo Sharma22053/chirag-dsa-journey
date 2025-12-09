@@ -14,23 +14,15 @@
  * }
  */
 class Solution {
+    List<Integer> list = new ArrayList<>();
     public List<Integer> postorderTraversal(TreeNode root) {
-        Stack<TreeNode> stack1 = new Stack<>();
-        Stack<TreeNode> stack2 = new Stack<>();
-        List<Integer> list = new ArrayList<>();
-        if(root == null) return list;
-        stack1.push(root);
-        while(!stack1.isEmpty()){
-            root=stack1.pop();
-            stack2.push(root);
-            if(root.left != null) stack1.push(root.left);
-            if(root.right != null) stack1.push(root.right);
-
-        }
-
-        while(!stack2.isEmpty()){
-            list.add(stack2.pop().val);
-        }
+        helper(root);
         return list;
+    }
+    private  void helper (TreeNode root){
+        if(root == null) return;
+        helper(root.left);
+        helper(root.right);
+        list.add(root.val);
     }
 }
