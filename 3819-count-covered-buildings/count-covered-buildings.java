@@ -1,37 +1,50 @@
 class Solution {
-
     public int countCoveredBuildings(int n, int[][] buildings) {
+        Map<Integer,Pair> xToMinMax = new HashMap<>();
+        Map<Integer,Pair> yToMinMax = new HashMap<>();
 
-        int[] rMax = new int[n + 1];
-        int[] rMin = new int[n + 1];
-        int[] cMax = new int[n + 1];
-        int[] cMin = new int[n + 1];
+        for(int[] building : buildings){
+            int x = building[0];
+            int y = building[1];
 
-        Arrays.fill(rMin, n + 1);
-        Arrays.fill(cMin, n + 1);
+            if(!xToMinMax.containsKey(x)){
+                xToMinMax.put(x,new Pair(Integer.MAX_VALUE,Integer.MIN_VALUE));
+            }
+             if(!yToMinMax.containsKey(y)){
+                yToMinMax.put(y,new Pair(Integer.MAX_VALUE,Integer.MIN_VALUE));
+            }
+            Pair xPair = xToMinMax.get(x);
+            xPair.min = Math.min(xPair.min,y);
+            xPair.max = Math.max(xPair.max,y);
 
-        for (int[] p : buildings) {
-            int x = p[0], y = p[1];
-
-            rMax[y] = Math.max(rMax[y], x);
-            rMin[y] = Math.min(rMin[y], x);
-
-            cMax[x] = Math.max(cMax[x], y);
-            cMin[x] = Math.min(cMin[x], y);
+            Pair yPair = yToMinMax.get(y);
+            yPair.min = Math.min(yPair.min,x);
+            yPair.max = Math.max(yPair.max,x);
+            
         }
+        int count = 0;
+        for(int[] building : buildings){
+            int x = building[0];
+            int y = building[1];
 
-        int cnt = 0;
+            Pair xPair = yToMinMax.get(y);
+            Pair yPair = xToMinMax.get(x);
 
-        for (int[] p : buildings) {
-            int x = p[0], y = p[1];
-
-            if (x > rMin[y] && x < rMax[y] &&
-                y > cMin[x] && y < cMax[x]) 
-            {
-                cnt++;
+            if(xPair.min < x &&  x  < xPair.max && yPair.min < y && y < yPair.max){
+                count++;
             }
         }
+        return count;
+    }
+}
 
-        return cnt;
+class Pair {
+    
+    int min;
+    int max;
+
+    Pair(int min, int max) {
+        this.min = min;
+        this.max = max;
     }
 }
