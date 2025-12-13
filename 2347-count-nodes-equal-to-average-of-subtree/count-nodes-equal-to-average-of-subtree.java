@@ -24,19 +24,17 @@ class Solution {
         Pair left = helper(root.left);
         Pair right = helper(root.right);
 
-        int NodeSum = root.val + left.sum + right.sum;
-        int nodeCount = left.noOfNodes + right.noOfNodes + 1;
+        int sum = root.val + left.sum + right.sum;
+        int nodes = 1 + left.noOfNodes + right.noOfNodes;
 
-        if(NodeSum / nodeCount == root.val) count++;
-        return new Pair(NodeSum,nodeCount);
-
+        if(sum / nodes == root.val) count++;
+        return new Pair(sum,nodes);
     }
-
 }
 class Pair{
     int sum;
     int noOfNodes;
-    Pair(int sum,int noOfNodes){
+    Pair(int sum , int noOfNodes){
         this.sum = sum;
         this.noOfNodes = noOfNodes;
     }
