@@ -14,34 +14,36 @@
  * }
  */
 class Solution {
-    List<Integer> result;
+    
     public List<Integer> getAllElements(TreeNode root1, TreeNode root2) {
-        result = new ArrayList<>();
-        helper(root1);
-        helper(root2);
-        Collections.sort(result);
-        return result;
+        List<Integer> list1 = new ArrayList<>();
+        List<Integer> list2 = new ArrayList<>();
+        helper(root1,list1);
+        helper(root2,list2);
+        
+        return merge(list1,list2);
     }
 
-    private void helper(TreeNode root){
+    private List<Integer> merge(List<Integer> list1 , List<Integer> list2){
+        int i=0,j=0;
+        List<Integer> merged = new ArrayList<>();
+        while( i< list1.size() && j<list2.size()){
+            if(list1.get(i) < list2.get(j)){
+                merged.add(list1.get(i++));
+            }else{
+                merged.add(list2.get(j++));
+            }
+        }
+        while(i < list1.size()) merged.add(list1.get(i++));
+        while(j < list2.size()) merged.add(list2.get(j++));
+        return merged;
+
+    }
+
+    private void helper(TreeNode root,List<Integer> list){
         if(root == null) return;
-        result.add(root.val);
-        helper(root.left);
-        helper(root.right);
+        helper(root.left,list);
+        list.add(root.val);
+        helper(root.right,list);
     }
-
-    // private void helper(TreeNode root1,TreeNode root2){
-    //     if(root1.left == null && root1.left == null){
-    //         result.add(root1.val);
-    //         return;
-    //     }
-    //     if(root2.left == null && root2.left == null){
-    //         result.add(root2.val);
-    //         return;
-    //     }
-    //     helper(root1.left,root2.left);
-    //     helper(root1.right,root2.right);
-
-    // }
-
 }
